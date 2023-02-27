@@ -3,6 +3,8 @@ use redis::{aio::Connection, Client, Msg};
 use serde::{Deserialize, Serialize};
 use tracing::{error, info};
 
+use crate::bigquery;
+
 pub struct RedisClient {
     client: Client,
 }
@@ -47,16 +49,34 @@ impl RedisClient {
                     }
                 };
                 // Handle the message
-                Self::handle_redis_message(msg);
+                Self::handle_redis_message(msg).await;
             }
         }
     }
     /// Handle a message received from redis
-    fn handle_redis_message(msg: Msg) {
-        println!(
-            "Received message from redis: {0}",
-            msg.get_payload::<String>().unwrap()
-        );
+    async fn handle_redis_message(msg: Msg) {
+        // Read message payload
+        let payload = match msg.get_payload::<String>() {
+            Ok(payload) => payload,
+            Err(e) => {
+                error!("Error getting payload from redis message: {0}", e);
+                return;
+            }
+        };
+        // Deserialize message payload
+        let redis_message: RedisMessage = match serde_json::from_str(&payload) {
+            Ok(msg) => msg,
+            Err(e) => {
+                error!("Error deserializing redis message: {0}", e);
+                return;
+            }
+        };
+        // Log the message
+        bigquery::log_in_bq(
+            redis_message.topic,
+            String::from_utf8(redis_message.payload).expect("Could not decode payload (not utf-8)"),
+        )
+        .await;
     }
 }
 
