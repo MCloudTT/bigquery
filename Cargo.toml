@@ -6,3 +6,12 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+gcp-bigquery-client = "0.16.4"
+chrono = "0.4.23"
+serde = { version = "1.0.130", features = ["derive"] }
+redis = { version = "0.22.3", features = ["bytes", "tokio-comp"] }
+serde_json = "1.0"
+tokio = { version = "1", features = ["full"] }
+tracing = "0.1.37"
+tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
+futures-util = "0.3.26"
