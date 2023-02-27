@@ -10,7 +10,7 @@ pub struct RedisClient {
 impl RedisClient {
     pub fn new(host: String, port: u16) -> Self {
         Self {
-            client: redis::Client::open(format!("redis://{0}:{1}", host, port)).unwrap(),
+            client: redis::Client::open(format!("redis://{host}:{port}")).unwrap(),
         }
     }
     /// Get a connection to redis instance
@@ -31,7 +31,7 @@ impl RedisClient {
             // Get a connection to redis instance
             let mut con = self.get_connection().await.into_pubsub();
             // Subscribe to redis pubsub channel "sync"
-            if let Err(_) = con.subscribe("sync").await {
+            if con.subscribe("sync").await.is_err() {
                 error!("Error subscribing to redis channel");
                 continue;
             }
