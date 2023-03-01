@@ -14,7 +14,7 @@ This is a service to log messages from [MCloudTT](https://github.com/MCloudTT/mc
 ⚠️NOTICE: The image contains the service-account-key. It is also possible to use the `gcp-bigquery-client` by utilizing a policy-binding between the GKE-Cluster and the service account. In future versions it is planned to pass the config.toml and sa.key as arguments to the container.
 
 ## BigQuery setup
-The expects the schema of the table to be as follows:
+The service expects the schema of the table to be as follows:
 ```json
 "schema": {
     "fields": [
