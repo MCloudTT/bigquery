@@ -8,3 +8,29 @@ This is a service to log messages from [MCloudTT](https://github.com/MCloudTT/mc
 1. Create a service account with role `bigquery.dataEditor`
 2. Create a key for that service account and put it in the root folder of the project
 3. Adjust the config.toml file
+
+## BigQuery setup
+The expects the schema of the table to be as follows:
+```json
+"schema": {
+    "fields": [
+      {
+        "maxLength": "64",
+        "mode": "REQUIRED",
+        "name": "topic",
+        "type": "STRING"
+      },
+      {
+        "maxLength": "256",
+        "mode": "REQUIRED",
+        "name": "message",
+        "type": "STRING"
+      },
+      {
+        "mode": "REQUIRED",
+        "name": "datetime",
+        "type": "DATETIME"
+      }
+    ]
+  }
+```
