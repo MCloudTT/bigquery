@@ -8,6 +8,10 @@ This is a service to log messages from [MCloudTT](https://github.com/MCloudTT/mc
 1. Create a service account with role `bigquery.dataEditor`
 2. Create a key for that service account and put it in the root folder of the project
 3. Adjust the config.toml file
+4. Build the binary using `cargo build --release --target x86_64-unknown-linux-musl`; make sure to have the `x86_64-unknown-linux-musl` toolchain installed
+5. Build the docker container using `docker build -t mcloudtt-bq . --no-cache`
+
+⚠️NOTICE: The image contains the service-account-key. It is also possible to use the `gcp-bigquery-client` by utilizing a policy-binding between the GKE-Cluster and the service account. In future versions it is planned to pass the config.toml and sa.key as arguments to the container.
 
 ## BigQuery setup
 The expects the schema of the table to be as follows:
